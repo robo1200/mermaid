@@ -85,6 +85,7 @@ that id.
 "graph"                  {if(yy.lex.firstGraph()){this.begin("dir");}  return 'GRAPH';}
 "flowchart"              {if(yy.lex.firstGraph()){this.begin("dir");}  return 'GRAPH';}
 "subgraph"               return 'subgraph';
+"swimlane"               return 'swimlane';
 "end"\b\s*               return 'end';
 
 "_self"                  return 'LINK_TARGET';
@@ -348,6 +349,8 @@ statement
     // {$$=yy.addSubGraph($textNoTags,$document,$textNoTags);}
     | subgraph separator document end
     {$$=yy.addSubGraph(undefined,$document,undefined);}
+    | swimlane SPACE textNoTags separator document end
+    {$$=yy.addSwinLane($textNoTags,$document,$textNoTags);}
     | direction
     | acc_title acc_title_value  { $$=$acc_title_value.trim();yy.setAccTitle($$); }
     | acc_descr acc_descr_value  { $$=$acc_descr_value.trim();yy.setAccDescription($$); }
@@ -460,7 +463,7 @@ text: textToken
 
 
 keywords
-    : STYLE | LINKSTYLE | CLASSDEF | CLASS | CLICK | GRAPH | DIR | subgraph | end | DOWN | UP;
+    : STYLE | LINKSTYLE | CLASSDEF | CLASS | CLICK | GRAPH | DIR | subgraph | end | DOWN | UP | swimlane;
 
 
 textNoTags: textNoTagsToken
